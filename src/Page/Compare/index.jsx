@@ -39,7 +39,7 @@ const ComparePage = () => {
     const fetchDataInRange = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8080/countSevenAgo",
+          `${import.meta.env.VITE_PORT}/countSevenAgo`,
           {
             params: {
               start: date.toISOString().slice(0, -1),

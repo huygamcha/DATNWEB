@@ -21,9 +21,10 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8080/countTotal");
+        const response = await axios.get(
+          `${import.meta.env.VITE_PORT}/countTotal`
+        );
         if (response.data) {
-          console.log("««««« 1 »»»»»", 1);
           setTotalPerson(response.data);
         }
       } catch (error) {
@@ -57,7 +58,7 @@ const HomePage = () => {
       const fetchDataInRange = async () => {
         try {
           const response = await axios.get(
-            "http://127.0.0.1:8080/countTotalInTimeRange",
+            `${import.meta.env.VITE_PORT}/countTotalInTimeRange`,
             {
               params: {
                 start: startDate.toISOString().slice(0, -1),
@@ -123,7 +124,7 @@ const HomePage = () => {
         console.log("««««« formattedEndDate »»»»»", formattedEndDate);
 
         const response = await axios.get(
-          "http://127.0.0.1:8080/countByPickerDate",
+          `${import.meta.env.VITE_PORT}/countByPickerDate`,
           {
             params: {
               start: formattedStartDate,
