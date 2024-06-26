@@ -74,7 +74,7 @@ const ComparePage = () => {
       }}
     >
       <>
-        <Row gutter={6}>
+        <Row gutter={10}>
           <Col xs={24} sm={24}>
             <Flex
               className="header_wrapper"
