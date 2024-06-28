@@ -34,6 +34,9 @@ const ComparePage = () => {
   const [totalPersonTime, setTotalPersonTime] = useState();
   const [timeRange, setTimeRange] = useState(0);
 
+  const [totalPersonInTime, setTotalPersonInTime] = useState();
+  const [personInTime, setPersonInTime] = useState(0);
+
   useEffect(() => {
     let date = new Date();
     const fetchDataInRange = async () => {
@@ -55,10 +58,35 @@ const ComparePage = () => {
     };
     fetchDataInRange();
   }, [timeRange]);
-  // const handlePickerDate = (e) => {
-  //   console.log("««««« e »»»»»", e);
-  // };
-  console.log("««««« totalPersonTime »»»»»", totalPersonTime);
+
+  useEffect(() => {
+    let date = new Date();
+    const fetchDataInRange = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_PORT}/countForTime`,
+          {
+            params: {
+              start: date.toISOString().slice(0, -1),
+              day: timeRange,
+            },
+          }
+        );
+        setTotalPersonInTime(response.data);
+        console.log("««««« response »»»»»", response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchDataInRange();
+  }, [timeRange]);
+  console.log("««««« totalPersonInTime »»»»»", totalPersonInTime);
+  console.log(
+    "«««««  totalPersonInTime totalPersonInTimetotalPersonInTime »»»»»",
+    totalPersonInTime &&
+      totalPersonInTime.hourly_counts &&
+      totalPersonInTime.hourly_counts.map((data) => data[1][0].goingIn)
+  );
   return (
     <ConfigProvider
       theme={{
@@ -134,6 +162,38 @@ const ComparePage = () => {
                     data:
                       totalPersonTime &&
                       totalPersonTime.map((data) => data.countGoingIn),
+                  },
+                ],
+              }}
+            />
+          </Col>
+
+          {/* line */}
+          <Col style={{ marginTop: "30px" }} xs={24} md={24}>
+            <Bar
+              data={{
+                labels:
+                  totalPersonInTime &&
+                  totalPersonInTime.hourly_counts &&
+                  totalPersonInTime.hourly_counts.map((data) => data[0]),
+                datasets: [
+                  {
+                    label: "Đi ra",
+                    data:
+                      totalPersonInTime &&
+                      totalPersonInTime.hourly_counts &&
+                      totalPersonInTime.hourly_counts.map(
+                        (data) => data[1][0].goingOut
+                      ),
+                  },
+                  {
+                    label: "Đi vào",
+                    data:
+                      totalPersonInTime &&
+                      totalPersonInTime.hourly_counts &&
+                      totalPersonInTime.hourly_counts.map(
+                        (data) => data[1][0].goingIn
+                      ),
                   },
                 ],
               }}
